@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Historia clínica')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('historias')}">
+    <th:block th:fragment="content">
+        <div class="page-header">
+            <div><a th:href="@{/pacientes/detalle/{id}(id=${historia.paciente.id})}" class="back-link"><i
+                    class="bi bi-arrow-left"></i> Volver al paciente</a>
+                <h1>Historia clínica</h1>
+                <p>Registro médico de <strong th:text="${historia.paciente.nombreCompleto}">Paciente</strong>.</p></div>
+        </div>
+        <form action="/historias/guardar" method="post"><input type="hidden" name="id" th:value="${historia.id}"><input
+                type="hidden" name="paciente.id" th:value="${historia.paciente.id}">
+            <div class="panel form-panel">
+                <div class="section-title">
+                    <div class="section-icon purple"><i class="bi bi-clipboard2-pulse-fill"></i></div>
+                    <div><h3>Evaluación médica</h3>
+                        <p>Información clínica del paciente</p></div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-12"><label>Motivo de consulta *</label><input required class="form-control"
+                                                                                  name="motivoConsulta"
+                                                                                  th:value="${historia.motivoConsulta}"
+                                                                                  placeholder="¿Por qué acude el paciente?">
+                    </div>
+                    <div class="col-md-6"><label>Antecedentes</label><textarea class="form-control textarea"
+                                                                               name="antecedentes"
+                                                                               th:text="${historia.antecedentes}"
+                                                                               placeholder="Antecedentes personales, familiares, alergias..."></textarea>
+                    </div>
+                    <div class="col-md-6"><label>Diagnóstico</label><textarea class="form-control textarea"
+                                                                              name="diagnostico"
+                                                                              th:text="${historia.diagnostico}"
+                                                                              placeholder="Diagnóstico médico..."></textarea>
+                    </div>
+                    <div class="col-md-6"><label>Tratamiento</label><textarea class="form-control textarea"
+                                                                              name="tratamiento"
+                                                                              th:text="${historia.tratamiento}"
+                                                                              placeholder="Medicamentos, indicaciones, recomendaciones..."></textarea>
+                    </div>
+                    <div class="col-md-6"><label>Observaciones</label><textarea class="form-control textarea"
+                                                                                name="observaciones"
+                                                                                th:text="${historia.observaciones}"
+                                                                                placeholder="Notas adicionales..."></textarea>
+                    </div>
+                </div>
+                <div class="form-footer"><a th:href="@{/pacientes/detalle/{id}(id=${historia.paciente.id})}"
+                                            class="btn btn-light">Cancelar</a>
+                    <button class="btn btn-primary"><i class="bi bi-save"></i> Guardar historia</button>
+                </div>
+            </div>
+        </form>
+    </th:block>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Pacientes')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('pacientes')}">
+    <th:block th:fragment="content">
+        <div class="page-header">
+            <div><span class="eyebrow">GESTIÓN CLÍNICA</span>
+                <h1>Pacientes</h1>
+                <p>Administra la información y el historial de tus pacientes.</p></div>
+            <a href="/pacientes/nuevo" class="btn btn-primary"><i class="bi bi-person-plus-fill"></i> Nuevo paciente</a>
+        </div>
+        <div class="panel">
+            <div class="toolbar">
+                <form class="search-box" action="/pacientes"><i class="bi bi-search"></i><input name="q" th:value="${q}"
+                                                                                                placeholder="Buscar por nombre, apellido o DNI...">
+                    <button class="d-none"></button>
+                </form>
+                <div class="toolbar-actions"><span class="result-count"
+                                                   th:text="${#lists.size(pacientes)} + ' pacientes'">0 pacientes</span>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table modern-table align-middle">
+                    <thead>
+                    <tr>
+                        <th>PACIENTE</th>
+                        <th>DNI</th>
+                        <th>CONTACTO</th>
+                        <th>FECHA NACIMIENTO</th>
+                        <th>ESTADO</th>
+                        <th class="text-end">ACCIONES</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p:${pacientes}">
+                        <td>
+                            <div class="person-cell">
+                                <div class="mini-avatar"
+                                     th:text="${#strings.substring(p.nombres,0,1)} + ${#strings.substring(p.apellidos,0,1)}">
+                                    MG
+                                </div>
+                                <div><strong th:text="${p.nombreCompleto}">Nombre</strong><small
+                                        th:text="${p.correo ?: 'Sin correo registrado'}">correo</small></div>
+                            </div>
+                        </td>
+                        <td th:text="${p.dni}">00000000</td>
+                        <td><span th:text="${p.telefono ?: '—'}">—</span></td>
+                        <td th:text="${#temporals.format(p.fechaNacimiento,'dd/MM/yyyy')}">01/01/2000</td>
+                        <td><span class="badge-soft green" th:text="${p.estado}">ACTIVO</span></td>
+                        <td class="text-end">
+                            <div class="action-group"><a class="action-btn"
+                                                         th:href="@{/pacientes/detalle/{id}(id=${p.id})}" title="Ver"><i
+                                    class="bi bi-eye"></i></a><a class="action-btn"
+                                                                 th:href="@{/pacientes/editar/{id}(id=${p.id})}"
+                                                                 title="Editar"><i class="bi bi-pencil"></i></a><a
+                                    class="action-btn" th:href="@{/historias/nueva/{id}(id=${p.id})}"
+                                    title="Historia clínica"><i class="bi bi-file-medical"></i></a>
+                                <form th:action="@{/pacientes/eliminar/{id}(id=${p.id})}" method="post"
+                                      onsubmit="return confirmarEliminacion()">
+                                    <button class="action-btn danger" title="Eliminar"><i class="bi bi-trash3"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(pacientes)}">
+                        <td colspan="6">
+                            <div class="empty-state"><i class="bi bi-people"></i><h4>No se encontraron pacientes</h4>
+                                <p>Prueba con otro término de búsqueda.</p></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('dashboard')}">
+    <th:block th:fragment="content">
+        <div class="page-header">
+            <div><span class="eyebrow">RESUMEN GENERAL</span>
+                <h1>Dashboard</h1>
+                <p>Este es el resumen de actividad de tu clínica.</p></div>
+            <a href="/citas/nueva" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nueva cita</a></div>
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="bi bi-people-fill"></i></div>
+                    <div><span>Pacientes registrados</span><strong th:text="${totalPacientes}">0</strong><small><i
+                            class="bi bi-arrow-up"></i> <span th:text="${pacientesActivos}">0</span> activos</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="bi bi-calendar-check-fill"></i></div>
+                    <div><span>Citas de hoy</span><strong th:text="${citasHoy}">0</strong><small>Agenda del día</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="bi bi-clipboard2-pulse-fill"></i></div>
+                    <div><span>Historias clínicas</span><strong th:text="${historias}">0</strong><small>Registros
+                        médicos</small></div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
+                    <div><span>Citas programadas</span><strong th:text="${citasProgramadas}">0</strong><small>Por
+                        atender</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="panel">
+                    <div class="panel-head">
+                        <div><h3>Próximas citas</h3>
+                            <p>Agenda de atención más cercana</p></div>
+                        <a href="/citas">Ver todas <i class="bi bi-arrow-right"></i></a></div>
+                    <div class="appointment" th:each="c : ${agenda}">
+                        <div class="date-box"><strong th:text="${#temporals.format(c.fecha,'dd')}">08</strong><span
+                                th:text="${#temporals.format(c.fecha,'MMM')}">OCT</span></div>
+                        <div class="appointment-info"><strong
+                                th:text="${c.paciente.nombreCompleto}">Paciente</strong><span
+                                th:text="${c.especialidad + ' · ' + c.medico}">Especialidad</span></div>
+                        <div class="appointment-time"><i class="bi bi-clock"></i> <span
+                                th:text="${#temporals.format(c.hora,'HH:mm')}">09:30</span></div>
+                        <span class="badge-soft blue">Programada</span>
+                    </div>
+                    <div th:if="${#lists.isEmpty(agenda)}" class="empty-state"><i class="bi bi-calendar-x"></i>
+                        <p>No hay citas próximas.</p></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel quick-panel">
+                    <div class="panel-head">
+                        <div><h3>Acciones rápidas</h3>
+                            <p>Accesos frecuentes</p></div>
+                    </div>
+                    <a href="/pacientes/nuevo" class="quick-action">
+                        <div class="qa-icon blue"><i class="bi bi-person-plus-fill"></i></div>
+                        <div><strong>Registrar paciente</strong><small>Crear nueva ficha</small></div>
+                        <i class="bi bi-chevron-right"></i></a>
+                    <a href="/citas/nueva" class="quick-action">
+                        <div class="qa-icon purple"><i class="bi bi-calendar-plus-fill"></i></div>
+                        <div><strong>Agendar cita</strong><small>Programar atención</small></div>
+                        <i class="bi bi-chevron-right"></i></a>
+                    <a href="/historias" class="quick-action">
+                        <div class="qa-icon green"><i class="bi bi-file-earmark-medical-fill"></i></div>
+                        <div><strong>Historias clínicas</strong><small>Consultar registros</small></div>
+                        <i class="bi bi-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>

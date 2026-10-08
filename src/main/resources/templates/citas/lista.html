@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Citas')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('citas')}">
+    <th:block th:fragment="content">
+        <div class="page-header">
+            <div><span class="eyebrow">AGENDA MÉDICA</span>
+                <h1>Citas</h1>
+                <p>Organiza y controla las atenciones programadas.</p></div>
+            <a href="/citas/nueva" class="btn btn-primary"><i class="bi bi-calendar-plus-fill"></i> Nueva cita</a></div>
+        <div class="panel">
+            <div class="toolbar">
+                <form class="date-filter" action="/citas"><label>Fecha</label><input type="date" name="fecha"
+                                                                                     th:value="${fecha}">
+                    <button class="btn btn-light">Consultar</button>
+                </form>
+                <div class="day-label"><i class="bi bi-calendar3"></i> <span
+                        th:text="${#temporals.format(fecha,'EEEE, dd MMMM yyyy')}">Hoy</span></div>
+            </div>
+            <div class="appointments-grid">
+                <div class="appointment-card" th:each="c:${citas}">
+                    <div class="appt-top"><span class="time" th:text="${#temporals.format(c.hora,'HH:mm')}">09:30</span><span
+                            class="badge-soft"
+                            th:classappend="${c.estado.name()=='PROGRAMADA'?'blue':c.estado.name()=='ATENDIDA'?'green':'red'}"
+                            th:text="${c.estado}">PROGRAMADA</span></div>
+                    <div class="appt-person">
+                        <div class="mini-avatar purple-bg" th:text="${#strings.substring(c.paciente.nombres,0,1)}">P
+                        </div>
+                        <div><strong th:text="${c.paciente.nombreCompleto}">Paciente</strong><small
+                                th:text="${c.paciente.dni}">DNI</small></div>
+                    </div>
+                    <div class="appt-info"><span><i class="bi bi-stethoscope"></i><b
+                            th:text="${c.medico}">Médico</b></span><span><i class="bi bi-hospital"></i><b
+                            th:text="${c.especialidad}">Especialidad</b></span><span th:if="${c.motivo}"><i
+                            class="bi bi-chat-left-text"></i><b th:text="${c.motivo}">Motivo</b></span></div>
+                    <div class="appt-actions"><a th:href="@{/citas/editar/{id}(id=${c.id})}"
+                                                 class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
+                        <form action="/citas/estado/__id__" th:action="@{/citas/estado/{id}(id=${c.id})}" method="post">
+                            <input type="hidden" name="estado" value="ATENDIDA">
+                            <button class="btn btn-sm btn-outline-success" th:disabled="${c.estado.name()=='ATENDIDA'}">
+                                Marcar atendida
+                            </button>
+                        </form>
+                        <form th:action="@{/citas/eliminar/{id}(id=${c.id})}" method="post"
+                              onsubmit="return confirmarEliminacion()">
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(citas)}" class="empty-state"><i class="bi bi-calendar-x"></i><h4>No hay citas
+                para esta fecha</h4>
+                <p>Selecciona otra fecha o registra una nueva cita.</p></div>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>

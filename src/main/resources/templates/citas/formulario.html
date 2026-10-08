@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Nueva cita')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('citas')}">
+    <th:block th:fragment="content">
+        <div class="page-header">
+            <div><a href="/citas" class="back-link"><i class="bi bi-arrow-left"></i> Volver a citas</a>
+                <h1 th:text="${cita.id==null?'Agendar nueva cita':'Editar cita'}">Nueva cita</h1>
+                <p>Programa la atención del paciente.</p></div>
+        </div>
+        <form action="/citas/guardar" method="post"><input type="hidden" name="id" th:value="${cita.id}">
+            <div class="panel form-panel">
+                <div class="section-title">
+                    <div class="section-icon purple"><i class="bi bi-calendar2-plus-fill"></i></div>
+                    <div><h3>Datos de la cita</h3>
+                        <p>Define paciente, médico y horario</p></div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6"><label>Paciente *</label><select required name="paciente.id"
+                                                                           class="form-select">
+                        <option value="">Seleccionar paciente</option>
+                        <option th:each="p:${pacientes}" th:value="${p.id}"
+                                th:selected="${cita.paciente != null and cita.paciente.id == p.id}"
+                                th:text="${p.nombreCompleto + ' — DNI ' + p.dni}"></option>
+                    </select></div>
+                    <div class="col-md-6"><label>Especialidad *</label><select required name="especialidad"
+                                                                               class="form-select">
+                        <option value="">Seleccionar especialidad</option>
+                        <option th:selected="${cita.especialidad=='Medicina General'}">Medicina General</option>
+                        <option th:selected="${cita.especialidad=='Cardiología'}">Cardiología</option>
+                        <option th:selected="${cita.especialidad=='Pediatría'}">Pediatría</option>
+                        <option th:selected="${cita.especialidad=='Dermatología'}">Dermatología</option>
+                        <option th:selected="${cita.especialidad=='Odontología'}">Odontología</option>
+                        <option th:selected="${cita.especialidad=='Ginecología'}">Ginecología</option>
+                    </select></div>
+                    <div class="col-md-6"><label>Médico *</label><input required name="medico" class="form-control"
+                                                                        th:value="${cita.medico}"
+                                                                        placeholder="Ej. Dra. Ana Salazar"></div>
+                    <div class="col-md-3"><label>Fecha *</label><input required type="date" name="fecha"
+                                                                       class="form-control" th:value="${cita.fecha}">
+                    </div>
+                    <div class="col-md-3"><label>Hora *</label><input required type="time" name="hora"
+                                                                      class="form-control" th:value="${cita.hora}">
+                    </div>
+                    <div class="col-12"><label>Motivo de consulta</label><textarea name="motivo"
+                                                                                   class="form-control textarea"
+                                                                                   th:text="${cita.motivo}"
+                                                                                   placeholder="Describe brevemente el motivo..."></textarea>
+                    </div>
+                    <div class="col-md-6"><label>Estado</label><select name="estado" class="form-select">
+                        <option th:each="e:${T(pe.edu.grupo02.clinica.model.EstadoCita).values()}" th:value="${e}"
+                                th:selected="${cita.estado==e}" th:text="${e}"></option>
+                    </select></div>
+                </div>
+                <div class="form-footer"><a href="/citas" class="btn btn-light">Cancelar</a>
+                    <button class="btn btn-primary"><i class="bi bi-calendar-check"></i> Guardar cita</button>
+                </div>
+            </div>
+        </form>
+    </th:block>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Detalle del paciente')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('pacientes')}">
+    <th:block th:fragment="content">
+        <div class="page-header">
+            <div><a href="/pacientes" class="back-link"><i class="bi bi-arrow-left"></i> Pacientes</a>
+                <h1>Ficha del paciente</h1>
+                <p>Información general e historia clínica.</p></div>
+            <div><a class="btn btn-light me-2" th:href="@{/pacientes/editar/{id}(id=${paciente.id})}"><i
+                    class="bi bi-pencil"></i> Editar</a><a class="btn btn-primary"
+                                                           th:href="@{/historias/nueva/{id}(id=${paciente.id})}"><i
+                    class="bi bi-file-medical"></i> Historia clínica</a></div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="panel profile-card">
+                    <div class="profile-avatar"
+                         th:text="${#strings.substring(paciente.nombres,0,1)} + ${#strings.substring(paciente.apellidos,0,1)}">
+                        MG
+                    </div>
+                    <h2 th:text="${paciente.nombreCompleto}">Paciente</h2><span class="badge-soft green"
+                                                                                th:text="${paciente.estado}">ACTIVO</span>
+                    <div class="profile-details">
+                        <div><i class="bi bi-card-text"></i><span><small>DNI</small><strong th:text="${paciente.dni}">00000000</strong></span>
+                        </div>
+                        <div><i class="bi bi-calendar3"></i><span><small>Fecha de nacimiento</small><strong
+                                th:text="${#temporals.format(paciente.fechaNacimiento,'dd/MM/yyyy')}">01/01/2000</strong></span>
+                        </div>
+                        <div><i class="bi bi-telephone"></i><span><small>Teléfono</small><strong
+                                th:text="${paciente.telefono ?: 'No registrado'}">—</strong></span></div>
+                        <div><i class="bi bi-envelope"></i><span><small>Correo</small><strong
+                                th:text="${paciente.correo ?: 'No registrado'}">—</strong></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="panel">
+                    <div class="panel-head">
+                        <div><h3>Historia clínica</h3>
+                            <p>Registro médico principal del paciente</p></div>
+                    </div>
+                    <div th:if="${historia != null}" class="medical-record">
+                        <div class="record-item"><span>Motivo de consulta</span><strong
+                                th:text="${historia.motivoConsulta}">—</strong></div>
+                        <div class="record-item"><span>Antecedentes</span>
+                            <p th:text="${historia.antecedentes ?: 'Sin información registrada.'}">—</p></div>
+                        <div class="record-item"><span>Diagnóstico</span>
+                            <p th:text="${historia.diagnostico ?: 'Sin diagnóstico registrado.'}">—</p></div>
+                        <div class="record-item"><span>Tratamiento</span>
+                            <p th:text="${historia.tratamiento ?: 'Sin tratamiento registrado.'}">—</p></div>
+                        <div class="record-item"><span>Observaciones</span>
+                            <p th:text="${historia.observaciones ?: 'Sin observaciones.'}">—</p></div>
+                        <a class="btn btn-outline-primary" th:href="@{/historias/nueva/{id}(id=${paciente.id})}">Actualizar
+                            historia</a></div>
+                    <div th:unless="${historia != null}" class="empty-state"><i class="bi bi-file-earmark-medical"></i>
+                        <h4>Sin historia clínica</h4>
+                        <p>Este paciente todavía no tiene un registro médico.</p><a class="btn btn-primary"
+                                                                                    th:href="@{/historias/nueva/{id}(id=${paciente.id})}">Crear
+                            historia</a></div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>

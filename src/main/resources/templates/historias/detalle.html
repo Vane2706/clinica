@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Detalle de historia')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('historias')}">
+    <th:block th:fragment="content">
+        <div class="page-header">
+            <div><a th:href="@{/pacientes/detalle/{id}(id=${historia.paciente.id})}" class="back-link"><i
+                    class="bi bi-arrow-left"></i> Ficha del paciente</a>
+                <h1>Historia clínica</h1>
+                <p th:text="${historia.paciente.nombreCompleto}">Paciente</p></div>
+            <a class="btn btn-primary" th:href="@{/historias/nueva/{id}(id=${historia.paciente.id})}"><i
+                    class="bi bi-pencil"></i> Editar historia</a></div>
+        <div class="panel medical-document">
+            <div class="document-head">
+                <div class="clinic-mark"><i class="bi bi-heart-pulse-fill"></i></div>
+                <div><h2>MediCare</h2><span>Historia clínica electrónica</span></div>
+                <div class="ms-auto text-end"><small>Actualizada</small><strong
+                        th:text="${#temporals.format(historia.fechaActualizacion,'dd/MM/yyyy HH:mm')}">—</strong></div>
+            </div>
+            <div class="patient-strip"><strong th:text="${historia.paciente.nombreCompleto}">Paciente</strong><span>DNI: <b
+                    th:text="${historia.paciente.dni}">—</b></span><span>Fecha nac.: <b
+                    th:text="${#temporals.format(historia.paciente.fechaNacimiento,'dd/MM/yyyy')}">—</b></span></div>
+            <div class="document-grid">
+                <div><span>Motivo de consulta</span>
+                    <p th:text="${historia.motivoConsulta}">—</p></div>
+                <div><span>Diagnóstico</span>
+                    <p th:text="${historia.diagnostico ?: 'No registrado'}">—</p></div>
+                <div><span>Antecedentes</span>
+                    <p th:text="${historia.antecedentes ?: 'No registrados'}">—</p></div>
+                <div><span>Tratamiento</span>
+                    <p th:text="${historia.tratamiento ?: 'No registrado'}">—</p></div>
+                <div><span>Observaciones</span>
+                    <p th:text="${historia.observaciones ?: 'Sin observaciones'}">—</p></div>
+            </div>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>

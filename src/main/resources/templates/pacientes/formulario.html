@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Paciente')}"></head>
+
+<body>
+
+<div th:replace="~{fragments/layout :: shell('pacientes')}">
+
+    <th:block th:fragment="content">
+
+        <!-- ENCABEZADO -->
+        <div class="page-header">
+
+            <div>
+
+                <a href="/pacientes" class="back-link">
+                    <i class="bi bi-arrow-left"></i>
+                    Volver a pacientes
+                </a>
+
+                <h1 th:text="${paciente.id == null ? 'Nuevo paciente' : 'Editar paciente'}">
+                    Nuevo paciente
+                </h1>
+
+                <p>
+                    Completa los datos de identificación y contacto.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORMULARIO -->
+        <form th:action="@{/pacientes/guardar}"
+              th:object="${paciente}"
+              method="post"
+              novalidate>
+
+            <div class="panel form-panel">
+
+                <!-- TÍTULO DE SECCIÓN -->
+                <div class="section-title">
+
+                    <div class="section-icon blue">
+                        <i class="bi bi-person-vcard-fill"></i>
+                    </div>
+
+                    <div>
+                        <h3>Información personal</h3>
+
+                        <p>
+                            Datos básicos del paciente
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- CAMPOS -->
+                <div class="row g-3">
+
+
+                    <!-- NOMBRES -->
+                    <div class="col-md-6">
+
+                        <label for="nombres">
+                            Nombres <span class="text-danger">*</span>
+                        </label>
+
+                        <input
+                                id="nombres"
+                                type="text"
+                                class="form-control"
+                                th:field="*{nombres}"
+                                placeholder="Ej. María Fernanda"
+                                autocomplete="given-name">
+
+                        <div
+                                class="field-error"
+                                th:if="${#fields.hasErrors('nombres')}"
+                                th:errors="*{nombres}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- APELLIDOS -->
+                    <div class="col-md-6">
+
+                        <label for="apellidos">
+                            Apellidos <span class="text-danger">*</span>
+                        </label>
+
+                        <input
+                                id="apellidos"
+                                type="text"
+                                class="form-control"
+                                th:field="*{apellidos}"
+                                placeholder="Ej. García Torres"
+                                autocomplete="family-name">
+
+                        <div
+                                class="field-error"
+                                th:if="${#fields.hasErrors('apellidos')}"
+                                th:errors="*{apellidos}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- DNI -->
+                    <div class="col-md-4">
+
+                        <label for="dni">
+                            DNI <span class="text-danger">*</span>
+                        </label>
+
+                        <input
+                                id="dni"
+                                type="text"
+                                class="form-control"
+                                th:field="*{dni}"
+                                placeholder="8 dígitos"
+                                maxlength="8"
+                                inputmode="numeric">
+
+                        <div
+                                class="field-error"
+                                th:if="${#fields.hasErrors('dni')}"
+                                th:errors="*{dni}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- FECHA DE NACIMIENTO -->
+                    <div class="col-md-4">
+
+                        <label for="fechaNacimiento">
+                            Fecha de nacimiento
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input
+                                id="fechaNacimiento"
+                                type="date"
+                                class="form-control"
+                                th:field="*{fechaNacimiento}">
+
+                        <div
+                                class="field-error"
+                                th:if="${#fields.hasErrors('fechaNacimiento')}"
+                                th:errors="*{fechaNacimiento}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- SEXO -->
+                    <div class="col-md-4">
+
+                        <label for="sexo">
+                            Sexo
+                        </label>
+
+                        <select
+                                id="sexo"
+                                class="form-select"
+                                th:field="*{sexo}">
+
+                            <option value="">
+                                Seleccionar
+                            </option>
+
+                            <option value="Femenino">
+                                Femenino
+                            </option>
+
+                            <option value="Masculino">
+                                Masculino
+                            </option>
+
+                            <option value="Otro">
+                                Otro
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TELÉFONO -->
+                    <div class="col-md-6">
+
+                        <label for="telefono">
+                            Teléfono
+                        </label>
+
+                        <input
+                                id="telefono"
+                                type="tel"
+                                class="form-control"
+                                th:field="*{telefono}"
+                                placeholder="+51 987 654 321"
+                                autocomplete="tel">
+
+                    </div>
+
+
+                    <!-- CORREO -->
+                    <div class="col-md-6">
+
+                        <label for="correo">
+                            Correo electrónico
+                        </label>
+
+                        <input
+                                id="correo"
+                                type="email"
+                                class="form-control"
+                                th:field="*{correo}"
+                                placeholder="paciente@email.com"
+                                autocomplete="email">
+
+                        <div
+                                class="field-error"
+                                th:if="${#fields.hasErrors('correo')}"
+                                th:errors="*{correo}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- DIRECCIÓN -->
+                    <div class="col-12">
+
+                        <label for="direccion">
+                            Dirección
+                        </label>
+
+                        <input
+                                id="direccion"
+                                type="text"
+                                class="form-control"
+                                th:field="*{direccion}"
+                                placeholder="Dirección de domicilio"
+                                autocomplete="street-address">
+
+                    </div>
+
+
+                    <!-- ESTADO -->
+                    <div class="col-md-6">
+
+                        <label for="estado">
+                            Estado
+                        </label>
+
+                        <select
+                                id="estado"
+                                class="form-select"
+                                th:field="*{estado}">
+
+                            <option
+                                    th:each="e : ${T(pe.edu.grupo02.clinica.model.EstadoPaciente).values()}"
+                                    th:value="${e}"
+                                    th:text="${e}">
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BOTONES -->
+                <div class="form-footer">
+
+                    <a
+                            href="/pacientes"
+                            class="btn btn-light">
+
+                        <i class="bi bi-x-lg"></i>
+                        Cancelar
+
+                    </a>
+
+                    <button
+                            type="submit"
+                            class="btn btn-primary px-4">
+
+                        <i class="bi bi-check2"></i>
+                        Guardar paciente
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </th:block>
+
+</div>
+
+</body>
+
+</html>

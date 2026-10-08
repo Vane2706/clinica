@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Historias clínicas')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('historias')}">
+    <th:block th:fragment="content">
+        <div class="page-header">
+            <div><span class="eyebrow">REGISTROS MÉDICOS</span>
+                <h1>Historias clínicas</h1>
+                <p>Consulta y administra los antecedentes y evolución de los pacientes.</p></div>
+        </div>
+        <div class="panel">
+            <div class="table-responsive">
+                <table class="table modern-table align-middle">
+                    <thead>
+                    <tr>
+                        <th>PACIENTE</th>
+                        <th>MOTIVO</th>
+                        <th>DIAGNÓSTICO</th>
+                        <th>ÚLTIMA ACTUALIZACIÓN</th>
+                        <th class="text-end">ACCIÓN</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="h:${historias}">
+                        <td>
+                            <div class="person-cell">
+                                <div class="mini-avatar blue-bg"
+                                     th:text="${#strings.substring(h.paciente.nombres,0,1)}">P
+                                </div>
+                                <div><strong th:text="${h.paciente.nombreCompleto}">Paciente</strong><small
+                                        th:text="'DNI: '+${h.paciente.dni}">DNI</small></div>
+                            </div>
+                        </td>
+                        <td th:text="${h.motivoConsulta}">—</td>
+                        <td><span class="diagnosis" th:text="${h.diagnostico ?: 'Pendiente'}">—</span></td>
+                        <td th:text="${#temporals.format(h.fechaActualizacion,'dd/MM/yyyy HH:mm')}">—</td>
+                        <td class="text-end"><a class="btn btn-sm btn-outline-primary"
+                                                th:href="@{/historias/ver/{id}(id=${h.id})}"><i class="bi bi-eye"></i>
+                            Ver historia</a></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(historias)}">
+                        <td colspan="5">
+                            <div class="empty-state"><i class="bi bi-file-earmark-medical"></i><h4>No hay historias
+                                clínicas</h4></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>
